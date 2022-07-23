@@ -21,7 +21,7 @@ const ImageBuilder = () => {
   const generateImage = () => {
     const canvas = canvasRef.current
     if (!canvas) return
-    canvasSetup(canvas)
+    drawImage(canvas)
   }
 
   return (
@@ -36,7 +36,7 @@ const ImageBuilder = () => {
   )
 }
 
-const canvasSetup = async (canvas: HTMLCanvasElement) => {
+const drawImage = async (canvas: HTMLCanvasElement) => {
   const gridSize = 5
 
   const context = canvas.getContext('2d')
@@ -63,8 +63,17 @@ const canvasSetup = async (canvas: HTMLCanvasElement) => {
 
   const grid = waveFunction.getGrid()
 
+  //debugging help
+  //context.font = '30px Arial'
+  //context.fillStyle = '#000000'
+
+  //console.log(grid)
+
+  console.log(grid)
+
   for (let y = 0; y < grid.length; y++) {
     for (let x = 0; x < grid.length; x++) {
+      //console.log(grid[x][y])
       let tile = await loadImage(grid[y][x].getRemainingTiles()[0].imagePath)
       context.drawImage(
         tile,
@@ -73,6 +82,13 @@ const canvasSetup = async (canvas: HTMLCanvasElement) => {
         tileWidth,
         tileHeight
       )
+      /*
+      context.fillText(
+        `${x}, ${y}`,
+        x * tileWidth + tileWidth / 2 - 25,
+        y * tileHeight + tileHeight / 2
+      )
+      */
     }
   }
 }
