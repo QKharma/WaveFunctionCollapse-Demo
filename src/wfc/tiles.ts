@@ -18,8 +18,30 @@ export const Tiles: Tile[] = [
     constraints: {
       up: [1],
       down: [1],
-      left: [],
-      right: [],
+      left: [1],
+      right: [1],
+    },
+  },
+  {
+    id: 2,
+    name: 'tile2',
+    imagePath: 'tile2.png',
+    constraints: {
+      up: [2],
+      down: [2],
+      left: [2],
+      right: [2],
+    },
+  },
+  {
+    id: 3,
+    name: 'tile3',
+    imagePath: 'tile3.png',
+    constraints: {
+      up: [1],
+      down: [1],
+      left: [2],
+      right: [2],
     },
   },
 ]

@@ -10,12 +10,28 @@ const ImageBuilder = () => {
     if (!canvas) return
     canvas.height = 800
     canvas.width = 800
-    canvasSetup(canvas)
+    const context = canvas.getContext('2d')
+    if (!context) return
+    context.imageSmoothingEnabled = false
+    context.fillStyle = '#ffffff'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+    generateImage()
   }, [])
 
+  const generateImage = () => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    canvasSetup(canvas)
+  }
+
   return (
-    <div>
+    <div className='flex flex-col items-center space-y-4'>
       <canvas ref={canvasRef}></canvas>
+      <div>
+        <button className='text-black bg-gray-300 p-3' onClick={generateImage}>
+          Generate
+        </button>
+      </div>
     </div>
   )
 }
@@ -25,9 +41,6 @@ const canvasSetup = async (canvas: HTMLCanvasElement) => {
 
   const context = canvas.getContext('2d')
   if (!context) return
-  context.imageSmoothingEnabled = false
-  context.fillStyle = '#ffffff'
-  context.fillRect(0, 0, canvas.width, canvas.height)
 
   for (let i = 1; i < gridSize; i++) {
     context.beginPath()
@@ -46,6 +59,7 @@ const canvasSetup = async (canvas: HTMLCanvasElement) => {
   const tileWidth = canvas.width / gridSize
   const tileHeight = canvas.height / gridSize
   const waveFunction = new WaveFunction(gridSize, Tiles)
+  waveFunction.collapse()
 
   const grid = waveFunction.getGrid()
 
