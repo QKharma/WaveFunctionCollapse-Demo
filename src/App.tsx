@@ -3,7 +3,7 @@ import TileView from './components/TileView'
 
 function App() {
   return (
-    <div className='h-screen bg-gray-900 grid grid-cols-2 place-items-center'>
+    <div className='h-min-screen bg-gray-900 grid grid-rows-2 place-items-center overflow-y-auto'>
       <TileView />
       <ImageBuilder />
     </div>
