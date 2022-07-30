@@ -14,7 +14,7 @@ export const Tiles: Tile[] = [
   {
     id: 1,
     name: 'tile1',
-    imagePath: 'tile1.png',
+    imagePath: 'tiles/tile1.png',
     constraints: {
       up: [1, 3, 4, 5, 6],
       down: [1, 3, 4, 5],
@@ -25,7 +25,7 @@ export const Tiles: Tile[] = [
   {
     id: 2,
     name: 'tile2',
-    imagePath: 'tile2.png',
+    imagePath: 'tiles/tile2.png',
     constraints: {
       up: [2],
       down: [2, 6],
@@ -36,7 +36,7 @@ export const Tiles: Tile[] = [
   {
     id: 3,
     name: 'tile3',
-    imagePath: 'tile3.png',
+    imagePath: 'tiles/tile3.png',
     constraints: {
       up: [1, 3, 4, 5, 6],
       down: [1, 3, 4, 5],
@@ -47,7 +47,7 @@ export const Tiles: Tile[] = [
   {
     id: 4,
     name: 'tile4',
-    imagePath: 'tile4.png',
+    imagePath: 'tiles/tile4.png',
     constraints: {
       up: [1, 3, 5, 6],
       down: [1, 3, 5],
@@ -58,7 +58,7 @@ export const Tiles: Tile[] = [
   {
     id: 5,
     name: 'tile5',
-    imagePath: 'tile5.png',
+    imagePath: 'tiles/tile5.png',
     constraints: {
       up: [1, 3, 4, 6],
       down: [1, 3, 4],
@@ -69,7 +69,7 @@ export const Tiles: Tile[] = [
   {
     id: 6,
     name: 'tile6',
-    imagePath: 'tile6.png',
+    imagePath: 'tiles/tile6.png',
     constraints: {
       up: [2],
       down: [1, 3, 4, 5],

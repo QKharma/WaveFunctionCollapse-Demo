@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { Tiles } from '../wfc/tiles'
+import { loadImage } from '../lib/image'
+import { Tiles } from '../wfc/Tiles'
 import { WaveFunction } from '../wfc/WaveFunction'
 
 const ImageBuilder = () => {
@@ -67,10 +68,6 @@ const drawImage = async (canvas: HTMLCanvasElement) => {
   //context.font = '30px Arial'
   //context.fillStyle = '#000000'
 
-  //console.log(grid)
-
-  console.log(grid)
-
   for (let y = 0; y < grid.length; y++) {
     for (let x = 0; x < grid.length; x++) {
       //console.log(grid[x][y])
@@ -91,14 +88,6 @@ const drawImage = async (canvas: HTMLCanvasElement) => {
       */
     }
   }
-}
-
-const loadImage = (path: string) => {
-  return new Promise<CanvasImageSource>((r) => {
-    let i = new Image()
-    i.onload = () => r(i)
-    i.src = path
-  })
 }
 
 export default ImageBuilder

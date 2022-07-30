@@ -1,6 +1,6 @@
 import { arrayBuffer } from 'stream/consumers'
 import { getRandomInteger } from '../lib/math'
-import { Tile } from './tiles'
+import { Tile } from './Tiles'
 
 enum Direction {
   left,
