@@ -83,15 +83,17 @@ const TileView = () => {
   }, [])
 
   useEffect(() => {
-    setUpTiles(Tiles.filter((t) => selectedTile.constraints.up.includes(t.id)))
+    setUpTiles(
+      Tiles.filter((t) => selectedTile.constraints.up === t.constraints.down)
+    )
     setLeftTiles(
-      Tiles.filter((t) => selectedTile.constraints.left.includes(t.id))
+      Tiles.filter((t) => selectedTile.constraints.left === t.constraints.right)
     )
     setRightTiles(
-      Tiles.filter((t) => selectedTile.constraints.right.includes(t.id))
+      Tiles.filter((t) => selectedTile.constraints.right === t.constraints.left)
     )
     setDownTiles(
-      Tiles.filter((t) => selectedTile.constraints.down.includes(t.id))
+      Tiles.filter((t) => selectedTile.constraints.down === t.constraints.up)
     )
   }, [selectedTile])
 

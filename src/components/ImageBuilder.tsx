@@ -47,15 +47,15 @@ const ImageBuilder = () => {
 
   return (
     <div className='flex flex-col items-center space-y-4'>
-      <canvas ref={canvasRef}></canvas>
-      <div>
-        <button className='text-black bg-gray-300 p-3' onClick={generateImage}>
-          Generate
+      <canvas className='rounded-xl' ref={canvasRef}></canvas>
+      <div className='space-x-4'>
+        <button className='text-black bg-cyan-300 p-3' onClick={generateImage}>
+          <p className='font-semibold'>Generate</p>
         </button>
         <input
           type='range'
           min='4'
-          max='100'
+          max='50'
           value={gridSize}
           onChange={(e) => setGridSize(e.target.valueAsNumber)}
         ></input>

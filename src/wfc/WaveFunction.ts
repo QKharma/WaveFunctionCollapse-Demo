@@ -81,7 +81,7 @@ export class WaveFunction {
         if (n.dir === Direction.left) {
           let matches = editedCell
             ?.getRemainingTiles()
-            .filter((rt) => t.constraints.right.includes(rt.id))
+            .filter((rt) => t.constraints.right === rt.constraints.left)
           if (matches?.length === 0) {
             n.cell.removePossibility(t.id)
             wasReduced = true
@@ -90,7 +90,7 @@ export class WaveFunction {
         if (n.dir === Direction.right) {
           let matches = editedCell
             ?.getRemainingTiles()
-            .filter((rt) => t.constraints.left.includes(rt.id))
+            .filter((rt) => t.constraints.left === rt.constraints.right)
           if (matches?.length === 0) {
             n.cell.removePossibility(t.id)
             wasReduced = true
@@ -99,7 +99,7 @@ export class WaveFunction {
         if (n.dir === Direction.up) {
           let matches = editedCell
             ?.getRemainingTiles()
-            .filter((rt) => t.constraints.down.includes(rt.id))
+            .filter((rt) => t.constraints.down === rt.constraints.up)
           if (matches?.length === 0) {
             n.cell.removePossibility(t.id)
             wasReduced = true
@@ -108,7 +108,7 @@ export class WaveFunction {
         if (n.dir === Direction.down) {
           let matches = editedCell
             ?.getRemainingTiles()
-            .filter((rt) => t.constraints.up.includes(rt.id))
+            .filter((rt) => t.constraints.up === rt.constraints.down)
           if (matches?.length === 0) {
             n.cell.removePossibility(t.id)
             wasReduced = true
