@@ -12,12 +12,14 @@ const TileView = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
   const renderLines = () => {
-    console.log('bla')
+    let tileView = document.getElementById('tileView')?.getBoundingClientRect()
 
     const canvas = canvasRef.current
     if (!canvas) return
-    canvas.height = window.innerHeight
-    canvas.width = window.innerWidth
+    if (tileView) {
+      canvas.height = tileView?.height
+      canvas.width = tileView?.width
+    }
     const context = canvas.getContext('2d')
     if (!context) return
     context.imageSmoothingEnabled = false
@@ -28,32 +30,47 @@ const TileView = () => {
     let down = document.getElementById('down')?.getBoundingClientRect()
     let tile = document.getElementById('tile')?.getBoundingClientRect()
 
-    if (up && left && right && down && tile) {
+    if (up && left && right && down && tile && tileView) {
       context.lineWidth = 3
       context.strokeStyle = 'white'
 
       //up -> tile
       context.beginPath()
-      context.moveTo(up.x + up.width / 2, up.y + up.height)
-      context.lineTo(tile.x + tile.width / 2, tile.y)
+      context.moveTo(
+        up.x + up.width / 2 - tileView.x,
+        up.y + up.height - tileView.y
+      )
+      context.lineTo(tile.x + tile.width / 2 - tileView.x, tile.y - tileView.y)
       context.stroke()
 
       //left -> tile
       context.beginPath()
-      context.moveTo(left.x + left.width, left.y + left.height / 2)
-      context.lineTo(tile.x, tile.y + tile.height / 2)
+      context.moveTo(
+        left.x + left.width - tileView.x,
+        left.y + left.height / 2 - tileView.y
+      )
+      context.lineTo(tile.x - tileView.x, tile.y + tile.height / 2 - tileView.y)
       context.stroke()
 
       //right -> tile
       context.beginPath()
-      context.moveTo(right.x, right.y + right.height / 2)
-      context.lineTo(tile.x + tile.width, tile.y + tile.height / 2)
+      context.moveTo(
+        right.x - tileView.x,
+        right.y + right.height / 2 - tileView.y
+      )
+      context.lineTo(
+        tile.x + tile.width - tileView.x,
+        tile.y + tile.height / 2 - tileView.y
+      )
       context.stroke()
 
       //down -> tile
       context.beginPath()
-      context.moveTo(down.x + down.width / 2, down.y)
-      context.lineTo(tile.x + tile.width / 2, tile.y + tile.height)
+      context.moveTo(down.x + down.width / 2 - tileView.x, down.y - tileView.y)
+      context.lineTo(
+        tile.x + tile.width / 2 - tileView.x,
+        tile.y + tile.height - tileView.y
+      )
       context.stroke()
     }
   }
@@ -93,7 +110,7 @@ const TileView = () => {
         className='border-2 rounded-xl p-4 grid grid-cols-3 place-items-center'
       >
         {props.tiles.map((t) => (
-          <div className='m-2 relative'>
+          <div className='m-2 relative' key={t.name}>
             <img
               className='max-w-none'
               src={t.imagePath}
@@ -114,11 +131,14 @@ const TileView = () => {
   }
 
   return (
-    <div>
+    <div className='relative'>
       <div className='absolute inset-0 pointer-events-none'>
         <canvas ref={canvasRef} />
       </div>
-      <div className='p-4 grid grid-cols-3 place-items-center gap-x-20 gap-y-20'>
+      <div
+        id='tileView'
+        className='p-4 grid grid-cols-3 place-items-center gap-x-20 gap-y-20'
+      >
         <div></div>
         <PossibleTiles id='up' tiles={upTiles} chooseTile={setSelectedTile} />
         <div></div>

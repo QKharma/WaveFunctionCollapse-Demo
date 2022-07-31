@@ -5,7 +5,7 @@ import { WaveFunction } from '../wfc/WaveFunction'
 
 const ImageBuilder = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const [gridSize, setGridSize] = useState(5)
+  const [gridSize, setGridSize] = useState(10)
   const [images, setImages] = useState<
     { name: string; image: CanvasImageSource }[]
   >([])
@@ -27,8 +27,8 @@ const ImageBuilder = () => {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    canvas.height = 608 * 2
-    canvas.width = 608 * 2
+    canvas.height = 608
+    canvas.width = 608
     const context = canvas.getContext('2d')
     if (!context) return
     context.imageSmoothingEnabled = false
@@ -55,7 +55,7 @@ const ImageBuilder = () => {
         <input
           type='range'
           min='4'
-          max='200'
+          max='100'
           value={gridSize}
           onChange={(e) => setGridSize(e.target.valueAsNumber)}
         ></input>
@@ -67,24 +67,11 @@ const ImageBuilder = () => {
 const drawImage = async (
   canvas: HTMLCanvasElement,
   gridSize: number,
-  images: { name: string; image: CanvasImageSource }[]
+  images: { name: string; image: CanvasImageSource }[],
+  debug: boolean = false
 ) => {
   const context = canvas.getContext('2d')
   if (!context) return
-
-  // for (let i = 1; i < gridSize; i++) {
-  //   context.beginPath()
-  //   context.moveTo(0, (canvas.height * i) / gridSize)
-  //   context.lineTo(canvas.width, (canvas.height * i) / gridSize)
-  //   context.stroke()
-  // }
-
-  // for (let i = 1; i < gridSize; i++) {
-  //   context.beginPath()
-  //   context.moveTo((canvas.height * i) / gridSize, 0)
-  //   context.lineTo((canvas.height * i) / gridSize, canvas.height)
-  //   context.stroke()
-  // }
 
   const tileWidth = canvas.width / gridSize
   const tileHeight = canvas.height / gridSize
@@ -93,34 +80,35 @@ const drawImage = async (
 
   const grid = waveFunction.getGrid()
 
-  //debugging help
-  //context.font = '30px Arial'
-  //context.fillStyle = '#000000'
-
-  console.log('test')
+  context.font = '30px Arial'
+  context.fillStyle = '#000000'
 
   for (let y = 0; y < grid.length; y++) {
     for (let x = 0; x < grid.length; x++) {
-      //console.log(grid[x][y])
-      let tile = images.find(
-        (i) => i.name === grid[y][x].getRemainingTiles()[0].name
-      )
-      if (tile) {
-        context.drawImage(
-          tile.image,
-          x * tileWidth,
-          y * tileHeight,
-          tileWidth,
-          tileHeight
+      try {
+        let tile = images.find(
+          (i) => i.name === grid[y][x].getRemainingTiles()[0].name
+        )
+        if (tile) {
+          context.drawImage(
+            tile.image,
+            x * tileWidth,
+            y * tileHeight,
+            tileWidth,
+            tileHeight
+          )
+        }
+      } catch {
+        console.log('error')
+      }
+
+      if (debug) {
+        context.fillText(
+          `${x}, ${y}`,
+          x * tileWidth + tileWidth / 2 - 25,
+          y * tileHeight + tileHeight / 2
         )
       }
-      /*
-      context.fillText(
-        `${x}, ${y}`,
-        x * tileWidth + tileWidth / 2 - 25,
-        y * tileHeight + tileHeight / 2
-      )
-      */
     }
   }
 }

@@ -9,9 +9,20 @@ enum Direction {
   down,
 }
 
+type Pos = {
+  x: number
+  y: number
+}
+
+type CellValues = {
+  pos: Pos
+  remainingTiles: Tile[]
+}
+
 export class WaveFunction {
   private grid: Cell[][]
   private gridSize: number
+  private history: CellValues[][]
 
   constructor(gridSize: number, tiles: Tile[]) {
     this.grid = []
@@ -23,6 +34,7 @@ export class WaveFunction {
       }
       this.grid.push(row)
     }
+    this.history = []
   }
 
   getGrid() {
@@ -44,11 +56,21 @@ export class WaveFunction {
         y + pos.y < this.gridSize &&
         x + pos.x >= 0 &&
         x + pos.x < this.gridSize
-    ).forEach(({ y, x, dir }) =>
+    ).forEach(({ y, x, dir }) => {
       neighbours.push({ cell: this.grid[y + pos.y][x + pos.x], dir: dir })
-    )
+    })
 
     return neighbours
+  }
+
+  saveGridState() {
+    this.history = this.grid.map((r) => [...r.map((c) => c.copyValues())])
+  }
+
+  rollbackGridState() {
+    this.grid = this.history.map((r) =>
+      r.map((c) => new Cell(c.pos.x, c.pos.y, c.remainingTiles))
+    )
   }
 
   reduceNeighbours(editedCell: Cell) {
@@ -100,6 +122,7 @@ export class WaveFunction {
   }
 
   collapse() {
+    this.saveGridState()
     while (
       this.grid.reduce(
         (sum, current) =>
@@ -107,6 +130,8 @@ export class WaveFunction {
         0
       ) > 0
     ) {
+      this.saveGridState()
+
       let lowestPossibilityCells: Cell[] = []
       let lowestPossibilities = Infinity
       for (let y = 0; y < this.gridSize; y++) {
@@ -136,12 +161,21 @@ export class WaveFunction {
 
       editedCell.chooseRandomTile()
       this.reduceNeighbours(editedCell)
+
+      rollbackCheck: for (const row of this.grid) {
+        for (const cell of row) {
+          if (cell.getPossibilitiesCount() === 0) {
+            this.rollbackGridState()
+            break rollbackCheck
+          }
+        }
+      }
     }
   }
 }
 
 class Cell {
-  private pos: { x: number; y: number }
+  private pos: Pos
   private remainingTiles: Tile[]
 
   constructor(x: number, y: number, tiles: Tile[]) {
@@ -163,11 +197,16 @@ class Cell {
 
   removePossibility(id: number) {
     this.remainingTiles = this.remainingTiles.filter((t) => t.id !== id)
+    return this.remainingTiles.length
   }
 
   chooseRandomTile() {
     this.remainingTiles = [
       this.remainingTiles[getRandomInteger(this.remainingTiles.length)],
     ]
+  }
+
+  copyValues() {
+    return { pos: this.pos, remainingTiles: this.remainingTiles }
   }
 }
